@@ -1,38 +1,67 @@
 import React, { Component } from 'react';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng
+} from 'react-places-autocomplete';
 import './SearchBox.css';
 
 class SearchBox extends Component {
   constructor(props) {
-    super();
-    this.state = { value: '' };
+    super(props);
+    this.state = { city: '' };
   }
 
-  handleChange = e => {
-    this.setState({ value: e.target.value });
+  handleChange = city => {
+    this.setState({ city });
   };
 
-  handleSubmit = e => {
-    console.log(this.state.value);
-    this.setState({ value: '' });
-    e.preventDefault();
+  handleSelect = city => {
+    this.setState({ city });
+    geocodeByAddress(city)
+      .then(results => getLatLng(results[0]))
+      .then(({ lat, lng }) => this.props.getWeather(lat, lng))
+      .catch(err => console.log(err));
   };
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>
+      <PlacesAutocomplete
+        value={this.state.city}
+        onChange={this.handleChange}
+        onSelect={this.handleSelect}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
             <input
-              type='text'
-              name='search'
-              placeholder='Search for a city...'
-              value={this.state.value}
-              onChange={this.handleChange}
+              {...getInputProps({
+                placeholder: 'Search Places ...',
+                className: 'location-search-input'
+              })}
             />
-          </label>
-          <input type='submit' value='submit' />
-        </form>
-      </div>
+            <div className='autocomplete-dropdown-container'>
+              {loading && <div>Loading...</div>}
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
     );
   }
 }
