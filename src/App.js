@@ -23,12 +23,12 @@ class App extends Component {
       .then(({ data }) => {
         this.setState({
           city: data.name,
-          temp: data.main.temp,
-          tempHigh: data.main.temp_max,
-          tempLow: data.main.temp_min,
+          temp: Math.ceil(data.main.temp),
+          tempHigh: Math.ceil(data.main.temp_max),
+          tempLow: Math.ceil(data.main.temp_min),
+          humidity: Math.ceil(data.main.humidity),
           weather: data.weather[0].main,
-          humidity: data.main.humidity,
-          wind: data.wind.speed
+          wind: Math.ceil(data.wind.speed)
         });
       })
       .catch(err => {
