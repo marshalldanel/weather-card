@@ -11,6 +11,7 @@ class App extends Component {
     tempHigh: '',
     tempLow: '',
     weather: '',
+    icon: '',
     humidity: '',
     wind: ''
   };
@@ -28,6 +29,7 @@ class App extends Component {
           tempLow: Math.ceil(data.main.temp_min),
           humidity: Math.ceil(data.main.humidity),
           weather: data.weather[0].main,
+          icon: data.weather[0].icon,
           wind: Math.ceil(data.wind.speed)
         });
       })

@@ -1,34 +1,45 @@
 import React from 'react';
 import './Card.css';
+import SVG from './SVG';
 
-const renderWeatherIcon = weather => {
-  switch (weather) {
-    case 'Thunderstorm':
-      return <i className='fas fa-poo-storm' />;
-    case 'Drizzle':
-      return <i className='fas fa-cloud-rai' />;
-    case 'Rain':
-      return <i className='fas fa-cloud-showers-heavy' />;
-    case 'Snow':
-      return <i className='fas fa-snowflake' />;
-    case 'Clear':
-      return <i className='far fa-sun' />;
-    case 'Clouds':
-      return <i className='fas fa-cloud' />;
-    default:
-      return <i className='fas fa-meteor' />;
+const renderWeatherIcon = (weather, icon) => {
+  if (weather == 'Clouds' && icon == '04n') {
+    return <SVG name="thunderstorm" width={100} />;
+  } else if (weather == 'Clouds' && icon == '04d') {
+    return <SVG name="cloudy-night" width={100} />;
+  } else {
+    return <div />;
   }
 };
 
+// switch (true) {
+//   case 'Thunderstorm':
+//     return <SVG name='thunderstorm' width={100} />;
+//   case 'Drizzle':
+//     return <i className='fas fa-cloud-rai' />;
+//   case 'Rain':
+//     return <SVG name='rainy-night' width={100} />;
+//   case 'Snow':
+//     return <SVG name='snowflake' width={100} />;
+//   case 'Clear':
+//     return <i className='far fa-sun' />;
+//   case 'Clouds' && '04n':
+//       return <SVG name='thunderstorm' width={100} />
+//   case 'Clouds' && '04d':
+//     return <SVG name='cloudy-night' width={100} />
+//   default:
+//     return <i className='fas fa-meteor' />;
+// }
+
 const Card = ({ city, temp, weather, humidity, wind }) => {
   return (
-    <div className='card'>
+    <div className="card">
       <h1>{city}</h1>
-      <span className='main'>
+      <span className="main">
         <h2>{temp} &#176; F</h2>
         {weather ? renderWeatherIcon(weather) : ''}
       </span>
-      <span className='details'>
+      <span className="details">
         <p>Humidity: {humidity} %</p>
         <p>Wind: {wind} mph</p>
       </span>
